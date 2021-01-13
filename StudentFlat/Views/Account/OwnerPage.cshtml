@@ -1,0 +1,41 @@
+﻿@{
+    var owner = ViewData["Owner"] as Owner;
+    var flats = ViewData["Flats"] as IEnumerable<Flat>;
+}
+@{
+    <h1 class="display-4 mt-4">Твоя сторінка:</h1>
+    <div class="row mt-5 mb-2">
+        <div style="margin-top: 20px" class="col-lg-5 card border-info mb-3 mr-3">
+            <div class="card-body">
+                <h2>@owner.name</h2>
+                <hr>
+                <p>Телефон: @owner.phone</p>
+                <p>Email: @owner.email</p>
+            </div>
+        </div>
+        <div class="col-lg-6 card border-info mb-3 mr-3">
+            <h2>Твої квартири:</h2>
+            <hr>
+            @{
+                if (flats == null)
+                {
+                    <p>У вас поки що немає квартир на оренду, проте ви можете додати їх тут:</p>
+                    <a class="btn btn-outline-primary" href="#">Додати квартиру</a>
+                }
+                else
+                {
+                    foreach (var flat in flats)
+                    {
+                        <div class="col-lg-6">
+                            <img class="img-thumbnail" src="@Url.Content(flat.img)" alt="@flat.name"/>
+                            <h3>@flat.name</h3>
+                            <p>Ціна: @flat.price.ToString("F2")₴</p>
+                            <p>@flat.shortDesc</p>
+                            <p><a class="btn btn-outline-primary" asp-controller="Flats" asp-action="GetFlat" asp-route-flatId="@flat.id">Деталі</a></p>
+                        </div>
+                    }
+                }
+            }
+        </div>
+    </div>
+}

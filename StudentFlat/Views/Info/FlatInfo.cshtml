@@ -1,0 +1,57 @@
+﻿@{
+    var flat = ViewData["Flat"] as Flat;
+    var student = ViewData["Student"] as Student;
+}
+<div class="row mt-5 mb-2">
+    <div class="col-lg-5">
+        <img class="img-thumbnail" src="@Url.Content(flat.img)" alt="@flat.name">
+    </div>
+    <div class="col-lg-5 card border-info mb-3 mr-3">
+        <p>@flat.longDesc</p>
+        <hr>
+        <p>Власник: @flat.Owner.name</p>
+    </div>
+    <div style="margin-top: 20px" class="col-lg-5 card border-info mb-3 mr-3">
+        <div class="card-body">
+            <h2>@flat.name</h2>
+            <hr>
+            <p>Ціна: @flat.price.ToString("F2")₴</p>
+            <p>Кількість місць: @flat.capacity</p>
+            <p>Вільні місця: @flat.avPlaces</p>
+        </div>
+    </div>
+    @if (User.Identity.IsAuthenticated && !Boolean.Parse(User.Claims.FirstOrDefault(x => x.Type == "Role").Value) && !flat.StudentRequests.Select(e => e.Student).Any(e => e.UserId.Equals(Guid.Parse(User.Claims.FirstOrDefault(c => c.Type.Equals("Id")).Value))) && student.isSearching)
+    {
+        <div style="margin-top: 20px" class="col-lg-5">
+            <div class="card-body">
+                <p>Ви можете подати заявку на оренду цієї квартири:</p>
+                <p><a class="btn btn-outline-primary" asp-controller="Request" asp-action="RequestFlat" asp-route-flatId="@flat.id">Подати заявку</a></p>
+            </div>
+        </div>
+    }
+    @if (User.Identity.IsAuthenticated && flat.StudentRequests.Select(e => e.Student).Any(e => e.UserId.Equals(Guid.Parse(User.Claims.FirstOrDefault(c => c.Type.Equals("Id")).Value))))
+    {
+        <div style="margin-top: 20px" class="col-lg-5">
+            <div class="card-body">
+                <p style="font-style: italic">Ваша заявка скоро буде розглянута власником.</p>
+            </div>
+        </div>
+    }
+    @if (User.Identity.IsAuthenticated && Boolean.Parse(User.Claims.FirstOrDefault(x => x.Type == "Role").Value) && flat.Owner.UserId.Equals(Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "Id").Value)))
+    {
+        foreach (var request in flat.StudentRequests.Where(c => c.FlatId.Equals(flat.id)))
+        {
+            <div style="margin-top: 20px" class="col-lg-4 card border-info mb-3 mr-3">
+                <div class="card-body">
+                    <h3>@request.Student.name</h3>
+                    <hr>
+                    <p>Квартира: @request.Flat.name</p>
+                    <p>Телефон: @request.Student.phone</p>
+                    <p>Email: @request.Student.email</p>
+                    <p><a class="btn btn-outline-primary" asp-controller="Request" asp-action="RequestsApply" asp-route-studentId="@request.StudentId" asp-route-flatId="@request.FlatId">Прийняти</a></p>
+                    <p><a class="btn btn-outline-danger" asp-controller="Request" asp-action="RequestsDecline" asp-route-studentId="@request.StudentId" asp-route-flatId="@request.FlatId">Відмовити</a></p>
+                </div>
+            </div>
+        }
+    }
+</div>

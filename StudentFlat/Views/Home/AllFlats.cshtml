@@ -1,0 +1,24 @@
+﻿<h1 class="display-4 mt-4">Усі доступні квартири</h1>
+<div class="row mt-5 mb-2">
+    @{
+        foreach (var flat in ViewData["Flats"] as IEnumerable<Flat>)
+        {
+        <div class="col-lg-4">
+            <img class="img-thumbnail" src="@Url.Content(flat.img)" alt="@flat.name" />
+            <h3>@flat.name</h3>
+            <p>Ціна: @flat.price.ToString("F2")₴</p>
+            <p>@flat.shortDesc</p>
+            @{
+                if (flat.isAvail)
+                {
+                    <p><a class="btn btn-outline-primary" asp-controller="Flats" asp-action="GetFlat" asp-route-flatId="@flat.id">Деталі</a></p>
+                }
+                else
+                {
+                    <p style="font-style: italic; color: GrayText">Наразі недоступна</p>
+                }
+            }
+        </div>
+        }
+    }
+</div>

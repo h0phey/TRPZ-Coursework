@@ -1,0 +1,40 @@
+﻿@model StudentFlat.Models.Flat
+<h1 class="display-4 mt-4">Створення квартири</h1>
+
+<div class="row mt-4 mb-2">
+    <div class="col-lg-6 align-content-center">
+        <form asp-action="AddFlat" asp-controller="Request" asp-anti-forgery="true">
+            <div class="validation" asp-validation-summary="ModelOnly"></div>
+            <div>
+                <div class="form-group">
+                    <label asp-for="name">Введіть назву квартири:</label>
+                    <input type="text" asp-for="name" />
+                    <span style="font-style:italic" asp-validation-for="name" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="shortDesc">Введіть короткий опис квартири:</label>
+                    <textarea class="form-control" asp-for="shortDesc" rows="1"></textarea>
+                    <span style="font-style:italic" asp-validation-for="shortDesc" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="longDesc">Введіть повний опис квартири:</label>
+                    <textarea class="form-control" asp-for="longDesc" rows="3"></textarea>
+                    <span style="font-style:italic" asp-validation-for="longDesc" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="price">Введіть ціну:</label>
+                    <input asp-for="price" />
+                    <span style="font-style:italic" asp-validation-for="price" />
+                </div>
+                <div>
+                    <label asp-for="capacity">Введіть кількість місць:</label>
+                    <input asp-for="capacity" />
+                    <span style="font-style:italic" asp-validation-for="capacity" />
+                </div>
+                <div class="form-group mt-3">
+                    <input type="submit" value="Додати" class="btn btn-outline-dark" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
